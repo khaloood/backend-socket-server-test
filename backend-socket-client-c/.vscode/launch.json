@@ -1,0 +1,89 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug backend-socket-client",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/backend-socket-client",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "clean build",
+            "logging": {
+                "engineLogging": true,
+                "trace": true,
+                "traceResponse": true
+            },
+            "visualizerFile": "${workspaceFolder}/.vscode/gdb_visualizers/gdb_custom_vis.py"
+        },
+        {
+            "name": "Fast Debug backend-socket-client",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/backend-socket-client",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "fast build",
+            "logging": {
+                "engineLogging": true,
+                "trace": true,
+                "traceResponse": true
+            },
+            "visualizerFile": "${workspaceFolder}/.vscode/gdb_visualizers/gdb_custom_vis.py"
+        },
+        {
+            "name": "Valgrind Debug backend-socket-client",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/backend-socket-client",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "fast build",
+            "logging": {
+                "engineLogging": true,
+                "trace": true,
+                "traceResponse": true
+            },
+            "visualizerFile": "${workspaceFolder}/.vscode/gdb_visualizers/gdb_custom_vis.py",
+            "launchCompleteCommand": "exec-continue",
+            "debugServerArgs": "--tool=memcheck --leak-check=full"
+        }
+        
+    ]
+}

@@ -1,0 +1,6 @@
+# Ignore vcpkg installed libraries
+**/vcpkg_installed/
+**/build/
+**/*.a
+**/*.log
+

@@ -1,0 +1,55 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+#*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+#*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+#*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.cfg
+
+vcpkg/
+vcpkg_installed/
+build/
+logs/
+
+# Ignore build artifacts and libraries
+lib/include/quickfix/config_unix.h
+lib/lib/libquickfix.so*
+lib/quickfix/
+lib/
+
+# Ignore FIX session store files
+store/FIX.4.4-AMQTESTING-FIXCMC.body
+store/FIX.4.4-AMQTESTING-FIXCMC.header
+store/FIX.4.4-AMQTESTING-FIXCMC.seqnums
+store/FIX.4.4-AMQTESTING-FIXCMC.session
+store/FIX.4.4-khalidjmi1200-LMXBD.body
+store/FIX.4.4-khalidjmi1200-LMXBD.header
+store/FIX.4.4-khalidjmi1200-LMXBD.seqnums
+store/FIX.4.4-khalidjmi1200-LMXBD.session
+

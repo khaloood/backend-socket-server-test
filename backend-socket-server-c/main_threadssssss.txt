@@ -1,0 +1,114 @@
+
+
+#include <spdlog/spdlog.h>
+#include <csignal>
+#include <boost/asio.hpp>
+#include <memory>
+#include <vector>
+#include <condition_variable>
+
+#include "src/EscListener/EscListener.h"
+#include "src/WebSocketServer/WebSocketServer.h"
+#include "src/LogConfig/LogConfig.h" // Include your new logging system
+#include "src/DataStorage/DataStorage.h"
+#include "src/DataDumper/DataDumper.h"
+
+std::atomic<bool> running(true);
+std::condition_variable cv;
+std::mutex cv_m;
+boost::asio::io_context io_context;
+
+void signalHandler(int signum)
+{
+    spdlog::warn("Received signal {}. Stopping the server...", signum);
+    running = false;
+    io_context.stop();
+    cv.notify_all();
+}
+
+
+int main()
+{
+    try
+    {
+        const uint16_t PORT = 8086;
+        setup_logging();
+        LOG_INFO("Initializing server...");
+
+        // ✅ Register signal handler for graceful shutdown
+        std::signal(SIGINT, signalHandler);
+
+        DataStorage dataStorage;
+
+        // DataDumper dataDumper(dataStorage);
+        // dataDumper.start();
+
+        LOG_INFO("Server started on port {}", PORT);
+
+        boost::asio::io_context ioc;
+        auto work_guard = boost::asio::make_work_guard(ioc); // Ensures io_context keeps running
+        EscListener escListener(running, ioc, cv);
+        escListener.start();
+        // auto endpoint = tcp::endpoint(tcp::v4(), 8081);
+        auto endpoint = tcp::endpoint(boost::asio::ip::address_v4::any(), PORT); // Listen on all interfaces
+
+        // Thread pool for handling I/O
+        std::vector<std::thread> threads;
+        const unsigned int num_threads = std::thread::hardware_concurrency(); // Dynamic thread pool size based on available hardware
+        SPDLOG_INFO("Starting server with {} threads", num_threads);
+
+        for (unsigned int i = 0; i < num_threads; ++i)
+        {
+            threads.emplace_back([&ioc]()
+                                 {
+                                     try
+                                     {
+                                         ioc.run(); // Run the io_context in multiple threads
+                                     }
+                                     catch (const std::exception &e)
+                                     {
+                                         spdlog::error("Exception in I/O thread: {}", e.what());
+                                     } });
+        }
+
+        auto wsServer = std::make_shared<WebSocketServer>(ioc, endpoint, dataStorage);
+
+        // ✅ Run the WebSocket server
+        try
+        {
+            SPDLOG_INFO("Attempting to start WebSocket server...");
+            wsServer->start();
+            SPDLOG_INFO("WebSocket server started successfully");
+        }
+        catch (const std::exception &e)
+        {
+            SPDLOG_ERROR("WebSocket server failed to start: {}", e.what());
+            ioc.stop();        // Stop the I/O context if needed
+            wsServer->start(); // Restart the WebSocket server
+        }
+        while (running)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        SPDLOG_INFO("Stopping server...");
+        ioc.stop();
+        //  dataDumper.stop();
+        escListener.stop();
+
+        for (auto &thread : threads)
+        {
+            if (thread.joinable())
+            {
+                thread.join();
+            }
+        }
+
+        LOG_INFO("Server, ESC listener, and DataDumper stopped gracefully.");
+        return EXIT_SUCCESS;
+    }
+    catch (const std::exception &e)
+    {
+        LOG_ERROR("Server exception: {}", e.what());
+        return EXIT_FAILURE;
+    }
+}

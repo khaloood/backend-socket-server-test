@@ -1,0 +1,6 @@
+version: '3'
+services:
+  websocket-client:
+    build: .
+    ports:
+      - "8085:8085"

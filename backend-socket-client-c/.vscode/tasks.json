@@ -1,0 +1,76 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "clean build",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "-c",
+                "rm -rf ${workspaceFolder}/build && cmake -S ${workspaceFolder} -B ${workspaceFolder}/build -DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build ${workspaceFolder}/build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Generated task by Debugger."
+        },
+        {
+            "label": "fast build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build",
+                "--",
+                "-j16" // Adjust based on CPU cores
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Generated task by Debugger."
+        },
+        {
+            "label": "cmake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S",
+                "${workspaceFolder}",
+                "-B",
+                "${workspaceFolder}/build",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Generated task by Debugger."
+        },
+        {
+            "label": "build backend-socket-client",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--",
+                "-j8"  // Adjust based on your CPU cores
+            ],
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen"  // Automatically run when folder opens
+            }
+        }
+    ]
+}

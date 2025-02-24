@@ -1,0 +1,17 @@
+{
+  "dependencies": [
+    "zlib",
+    "fmt",
+    "openssl",
+    "curlpp",
+    "spdlog",
+    "libwebsockets",
+    "websocketpp",
+    "boost-thread",
+    "boost-asio",
+    "cpprestsdk",
+    "boost-beast",
+    "wt"
+
+  ]
+}
