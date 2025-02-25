@@ -8,7 +8,7 @@
 #ifdef _WIN32
     #include <conio.h>
 #else
-    int getKey();  // ✅ Declare function (not define) to avoid multiple definitions
+    int getKey();  
 #endif
 
 class EscListener {
