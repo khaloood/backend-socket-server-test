@@ -47,7 +47,7 @@ int main()
         auto work_guard = boost::asio::make_work_guard(ioc);
         auto endpoint = tcp::endpoint(boost::asio::ip::address_v4::any(), PORT);
 
-        EscListener escListener(running, ioc, cv); // ✅ Pass condition variable to EscListener
+        EscListener escListener(running, ioc, cv); // 
         escListener.start();
 
         spdlog::info("Starting WebSocket server...");
@@ -71,11 +71,10 @@ int main()
         escListener.stop();
         if (wsServer)
         {
-            wsServer->stop(); // ✅ Stop WebSocket server first
-        }
-        work_guard.reset(); // ✅ Release work to allow io_context to exit
+            wsServer->stop(); 
+        work_guard.reset(); 
 
-        // ✅ Ensure all remaining async tasks complete before stopping io_context
+       
         if (!ioc.stopped())
         {
             ioc.stop();
@@ -83,7 +82,7 @@ int main()
 
         if (io_thread.joinable())
         {
-            io_thread.join(); // ✅ Ensure io_context finishes before exiting
+            io_thread.join(); 
         }
         exit(0);
 
