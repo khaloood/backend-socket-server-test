@@ -38,7 +38,7 @@ void EscListener::listenForEsc() {
                     spdlog::warn("ESC key pressed. Stopping client...");
                     running = false;
                     std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Prevent re-trigger
-                    std::terminate();  // ✅ Safe termination
+                    std::terminate();  
                 }
             }
         #else
@@ -47,7 +47,7 @@ void EscListener::listenForEsc() {
                 spdlog::warn("ESC key pressed. Stopping client...");
                 running = false;
                 std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Prevent re-trigger
-                std::terminate();  // ✅ Safe termination
+                std::terminate();  
             }
         #endif
 
