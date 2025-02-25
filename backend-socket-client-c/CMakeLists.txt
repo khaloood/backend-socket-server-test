@@ -3,18 +3,14 @@ project(backend-socket-client-c)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-# ✅ Set Compiler Standards
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ✅ Set Vcpkg Toolchain File
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
-# ✅ Define Dependency Paths for Vcpkg
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/vcpkg_installed/x64-linux")
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/vcpkg_installed/x64-linux/share")
 
-# ✅ Include Directories
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/Src
@@ -24,7 +20,6 @@ include_directories(
 
 )
 
-# ✅ Find Packages
 find_package(Boost REQUIRED COMPONENTS system thread asio beast variant2)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
@@ -45,7 +40,6 @@ else()
     message(STATUS "Benchmarking DISABLED")
 endif()
 
-# ✅ Define Executable
 add_executable(backend-socket-client
     main.cpp
     src/Client/Client.cpp
@@ -58,7 +52,6 @@ add_executable(backend-socket-client
 
 )
 
-# ✅ Link Libraries
 target_link_libraries(backend-socket-client PRIVATE 
     Boost::system
     Boost::thread
@@ -75,5 +68,4 @@ target_link_libraries(backend-socket-client PRIVATE
     Threads::Threads
 )
 
-# ✅ Ensure Dependencies Are Installed via Vcpkg
 install(TARGETS backend-socket-client DESTINATION ${CMAKE_BINARY_DIR}/)
